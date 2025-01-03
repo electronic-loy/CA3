@@ -10,6 +10,7 @@ namespace Blackjack
     {
         static void Main(string[] args)
         {
+            Console.WriteLine("My first commit in Git!");
         }
     }
 }
