@@ -6,65 +6,50 @@ using System.Threading.Tasks;
 
 namespace Blackjack
 {
-    class Card
+    public class Card
     {
+        //This is a simple Card class, very "atomic",
+        //I have used for reference this video after looking at various options
+        //https://www.youtube.com/watch?v=pd9vtszpGZg&ab_channel=SirJosephthePaladin
 
-        //Making an array for suits, card names and scores.
-        //I tried not having to write down everything but it got too complicated
+        private string face;
+        private string suit;
 
-        public static string[] Suits = { "Hearts", "Diamonds", "Clubs", "Spades" };
-        public static string[] Names = { "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "Ace" };
-
-        //I didn't know how to address different scores for each since 4 cards are equal scores
-        //Chat-GPT suggested simply making an array with all the explicit scores already
-        //My new problem was that Ace is also 1 point so I already thought of doing an if later
-
-        public static int[] Scores = { 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 11 };
-
-        //Now that we have it we do the properties and the constructor
-        //Private set for Value so that it doesn't change while playing
-
-        public string Suit { get; }
-        public string Rank { get; }
-        public int Score { get; }
-
-        //This is the simplest way I can think about doing this right now
-        public Card(string suit, string rank)
+        public Card(string cardFace, string cardSuit)
         {
-            Suit = suit;
-            Rank = rank;
-
-            // Find the index of the rank in the Names array
-            int counter = Array.IndexOf(Names, rank);
-
-            // Assign the score directly from the Scores array
-            Score = Scores[counter];
-
-
-            //Suggestion from Gemini. Many solutions
-            //think of calculating that if ++Ace becomes 21, then it should be just 1 and not 11
-            //I thought it's simpler to calculate depending on the current hand value and that it switches either way
-            if (Rank == "A" && CalculateHandValue(new List<Card> { this }) > 10)
-            {
-                Score = 1;
-            }
+            face = cardFace;
+            suit = cardSuit;
         }
+
         public override string ToString()
         {
-            return $"{Rank} of {Suit}";
+            return face + " of " + suit;
         }
 
-        //From Gemini
+        //I have started again so most of what was here in DevJournal1 was moved to Deck
 
-        private static int CalculateHandValue(List<Card> hand)
+        // Property to calculate point value
+
+        //A switch statement allows me to avoid having to assign points manually
+        public int PointValue
         {
-            int total = 0;
-            foreach (Card card in hand)
+            get
             {
-                total += card.Score;
+                switch (face)
+                {
+                    case "Ace":
+                        return 11; // Default value is 11
+                    case "King":
+                    case "Queen":
+                    case "Jack":
+                        return 10;
+                    default:
+                        return int.Parse(face); // Numeric cards return their face value.
+                }
             }
-            return total;
         }
+
+
 
 
     }
