@@ -8,15 +8,24 @@ namespace Blackjack
 {
     public class Player
     {
-        //This was made by ChatGPT
+        //This was made originally by ChatGPT as on the previous "sending"
+        //Of course I have added now my personal touch and added more comments.
 
         public List<Card> Hand { get; private set; }
         public int Score => CalculateScore();
         public bool IsBust => Score > 21;
 
+        private bool hasAce; // Tracks if the player has an Ace instead of counting them, because we only need 1
+        //I added it as a boolean on purpose
+
+        //New Bool also added to have more bools, and this time concerning one of the extra rules.
+        //This bool was designed by Chat GPT, couldn't think how to improve it
+        public bool HasBlackjack => Hand.Count == 2 && Score == 21;
+
         public Player()
         {
             Hand = new List<Card>();
+            hasAce = false;
         }
 
         public void AddCard(Card card)
@@ -24,28 +33,32 @@ namespace Blackjack
             if (card != null)
             {
                 Hand.Add(card);
+                //instead of including the Ace boolean in CalculateScore
+                //I added it here
+                if (card.PointValue == 11) // If the card is an Ace
+                {
+                    hasAce = true;
+                }
             }
         }
 
         private int CalculateScore()
         {
             int total = 0;
-            int aceCount = 0;
+            
 
             foreach (var card in Hand)
             {
                 total += card.PointValue;
-                if (card.PointValue == 11) // Ace
-                {
-                    aceCount++;
-                }
             }
 
-            // Adjust for Aces if total > 21
-            while (total > 21 && aceCount > 0)
+            // Now we adjust Aces if total > 21
+            // if the total is more than 21 and there is an Ace,
+            // it automatically substracts 10 points
+
+            while (total > 21 && hasAce)
             {
                 total -= 10;
-                aceCount--;
             }
 
             return total;
@@ -53,10 +66,13 @@ namespace Blackjack
 
         public void ShowHand()
         {
-            Console.WriteLine("Player's Hand:");
+            Console.WriteLine("Player's Hand: (press any key to show the next action)");
+            Console.ReadKey();
             foreach (var card in Hand)
             {
                 Console.WriteLine(card);
+                //A readkey for some anticipation as in Dealer
+                
             }
             Console.WriteLine($"Total Score: {Score}");
         }

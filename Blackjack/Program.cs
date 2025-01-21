@@ -10,7 +10,7 @@ namespace Blackjack
     {
         static void Main(string[] args)
         {
-            //Basic blackjack with no extra rules
+            //Basic blackjack with 1 extra rule
 
             Deck deck = new Deck();
             deck.Shuffle();
@@ -29,23 +29,51 @@ namespace Blackjack
             player.ShowHand();
             dealer.ShowInitialCard();
 
-            // Player's turn (ChatGPT)
+            //First additional rule, Blackjack (two cards that sum 21)
+            
+            if (player.HasBlackjack)
+            {
+                if (dealer.HasBlackjack)
+                {
+                    Console.WriteLine("It's a tie! Both have Blackjack.");
+                }
+                else
+                {
+                    Console.WriteLine("Player wins with a Blackjack!");
+                }
+                return;
+            }
 
-            //There is a bug where sometimes the card value is not added, I need to fix that
+            // Player's turn (mainly ChatGPT)
+            // I have "twisted" the choices up a bit
+
+            //I haven´t faced any bugs today
 
             while (!player.IsBust)
             {
                 Console.WriteLine("Do you want to Stick or Twist? (s/t)");
+                
                 string choice = Console.ReadLine()?.ToLower();
 
                 if (choice == "t")
                 {
-                    player.AddCard(deck.DealCard());
-                    player.ShowHand();
+                    // Deal one card to the player
+                    //Before it was showing the whole hand again, now it should only be card by card
+                    var newCard = deck.DealCard();
+                    player.AddCard(newCard);
+
+                    Console.WriteLine($"You were dealt: {newCard}");
+                    Console.WriteLine($"Your current score: {player.Score}");
                 }
                 else if (choice == "s")
                 {
                     break;
+                }
+                // Invalid input wasn't handled before, so I just added it
+
+                else
+                {
+                    Console.WriteLine("Oopsy doopsy! Invalid choice! Please enter 's' to Stick or 't' to Twist.");
                 }
             }
 
