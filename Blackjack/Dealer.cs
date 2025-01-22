@@ -36,7 +36,7 @@ namespace Blackjack
             Console.WriteLine($"Total Score: {Score}");
         }
 
-        //I implemented the specific rule of the 16 points
+        //I implemented the specific general rule of the 16 points (the dealer needs to reach at least 17 points and if it's 16 he still plays)
         //Soft 17 rule will be implemented soon
 
         public bool ShouldHit()
