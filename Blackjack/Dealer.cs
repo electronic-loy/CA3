@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,29 +12,29 @@ namespace Blackjack
         // This Dealer class takes most of the behaviour from Player so I have inherited it.
         // Now updating both classes is easier, especially since I started adding the additional rules.
         // The rest is usually also very close to the player way
+        public Dealer(Translations translations) : base(translations) { }
 
         public void ShowInitialCard()
         {
             if (Hand.Count > 0)
             {
-                Console.WriteLine($"Dealer shows: {Hand[0]}");
+                // Replace "dealerShows" with the translation key
+                Console.WriteLine($"{translations.Get("dealerShows")}: {Hand[0].ToString(translations)}");
             }
         }
 
-        public void ShowFullHand()
+        public void ShowDealerHand()
         {
-            Console.WriteLine("Dealer's Hand: (press any key to show the next action)");
+            // Use translation for "dealerHand"
+            Console.WriteLine(translations.Get("dealerHand"));
+            Console.WriteLine(translations.Get("pressKey")); // "Press any key to continue..."
+            Console.ReadKey();
+
             foreach (var card in Hand)
             {
-                Console.WriteLine(card);
-                
-                //I have included ReadKey to make it feel more interactive
-                //and more like a videogame where you press a button for the next text.
-                //It also makes it more intriguing.
-
-                Console.ReadKey();
+                // Use translation for "card"
+                Console.WriteLine(translations.Get("card") + ": " + card.ToString(translations)); // Display the card details
             }
-            Console.WriteLine($"Total Score: {Score}");
         }
 
         //I implemented the specific general rule of the 16 points (the dealer needs to reach at least 17 points and if it's 16 he still plays)

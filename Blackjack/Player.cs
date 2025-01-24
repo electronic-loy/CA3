@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,7 @@ namespace Blackjack
         public int Score => CalculateScore();
         public bool IsBust => Score > 21;
 
+        protected Translations translations;
         private bool hasAce; // Tracks if the player has an Ace instead of counting them, because we only need 1
         //I added it as a boolean on purpose
 
@@ -22,10 +24,11 @@ namespace Blackjack
         //This bool was designed by Chat GPT, couldn't think how to improve it
         public bool HasBlackjack => Hand.Count == 2 && Score == 21;
 
-        public Player()
+        public Player(Translations translations)
         {
             Hand = new List<Card>();
             hasAce = false;
+            this.translations = translations; // Store the translation dictionary
         }
 
         public void AddCard(Card card)
@@ -66,15 +69,19 @@ namespace Blackjack
 
         public void ShowHand()
         {
-            Console.WriteLine("Player's Hand: (press any key to show the next action)");
+            // Replace "playerHand" with the translation key
+            Console.WriteLine(translations.Get("playerHand"));
+            Console.WriteLine(translations.Get("pressKey")); // "Press any key to continue..."
             Console.ReadKey();
+
             foreach (var card in Hand)
             {
-                Console.WriteLine(card);
-                //A readkey for some anticipation as in Dealer
-                
+                Console.WriteLine(card.ToString(translations)); // Display the card details
             }
-            Console.WriteLine($"Total Score: {Score}");
+
+            // Replace "totalScore" with the translation key
+            Console.WriteLine($"{translations.Get("totalScore")}: {Score}");
         }
+
     }
 }

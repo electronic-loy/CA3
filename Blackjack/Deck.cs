@@ -1,16 +1,9 @@
 ﻿using System;
-using System.CodeDom;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Blackjack
 {
     public class Deck
     {
-        //Declaring cards of the deck
-
         public Card[] deck;
         private int currentCard;
         private const int NUMBER_OF_CARDS = 52;
@@ -26,7 +19,6 @@ namespace Blackjack
 
             for (int count = 0; count < deck.Length; count++)
             {
-
                 deck[count] = new Card(faces[count % 13], suits[count / 13]);
             }
         }
@@ -45,20 +37,12 @@ namespace Blackjack
 
         public Card DealCard()
         {
-            if (currentCard < deck.Length) 
+            if (currentCard < deck.Length)
                 return deck[currentCard++];
             else
                 return null;
         }
-        
-        //New method to enable the shuffling
-        public int RemainingCards
-        {
-            get
-            {
-                return NUMBER_OF_CARDS - currentCard;
-            }
-        }
 
+        public int RemainingCards => NUMBER_OF_CARDS - currentCard;
     }
 }

@@ -11,20 +11,48 @@ namespace Blackjack
         static void Main(string[] args)
         {
             // Introducing the phenomenal option to read the rules!
+            // And Spanish Localization!
+            // Asking for language preference
+
 
             Console.WriteLine("Welcome to Blackjack!");
-            Console.WriteLine("Would you like to read the rules before starting? (y/n)");
+            Console.WriteLine("¡Bienvenidos a Blackjack!");
+            Console.WriteLine("Please select your language (press 1 or 2) / Selecciona el idioma (pulsa 1 o 2):");
+            Console.WriteLine("1. English");
+            Console.WriteLine("2. Español");
+            string languageChoice = Console.ReadLine();
+            string language = languageChoice == "2" ? "es" : "en";
+
+            // Initialize translations
+            Translations translations = new Translations(language);
+
+            Console.Clear();
+            Console.WriteLine(translations.Get("welcome"));
+
+            Console.Clear();
+
+            if (language == "en")
+            {
+                Console.WriteLine("Would you like to read the rules before starting? (y/n)");
+            }
+            else
+            {
+                Console.WriteLine("¿Te gustaría leer las reglas antes de empezar? (s/n)");
+            }
             string readRules = Console.ReadLine()?.ToLower();
 
-            if (readRules == "y")
+            if ((language == "en" && readRules == "y") || (language == "es" && readRules == "s"))
             {
-                Rules.Display();
-                Console.WriteLine("Press Enter to start the game...");
+                Rules.Display(language);
+                Console.WriteLine(language == "en" ? "Press Enter to start the game..." : "Presiona Enter para comenzar el juego...");
                 Console.ReadLine();
                 Console.Clear();
             }
 
-            //22nd Jan, I'm introducing a some kind of loop in which the game keeps on until the player quits and then gives a final balance
+            Console.Clear();
+            Console.WriteLine(translations.Get("startingBalance"));
+
+            //22nd Jan, I'm introducing a loop in which the game keeps on until the player quits and then gives a final balance
 
             int wins = 0, losses = 0;
             int playerBalance = 100; // Starting balance
@@ -33,7 +61,7 @@ namespace Blackjack
             Deck deck = new Deck();
             deck.Shuffle();
 
-            //New on 22nd Jan, since I want the game to go on, now
+            // New on 22nd Jan, since I want the game to go on, now
             // if the deck has less than 10 cards it reshuffles!
             // this was asked to do to Chat GPT
 
@@ -41,20 +69,20 @@ namespace Blackjack
             {
                 if (deck.RemainingCards < 10) // Reshuffle when low on cards
                 {
-                    Console.WriteLine("Reshuffling the deck...");
+                    Console.WriteLine(translations.Get("reshuffle"));
                     deck = new Deck();
                     deck.Shuffle();
                 }
 
-                Player player = new Player();
-                Dealer dealer = new Dealer();
+                Player player = new Player(translations);
+                Dealer dealer = new Dealer(translations);
 
-                //Betting (added 22nd Jan)
-                Console.WriteLine($"Enter your bet. Your current balance is: {playerBalance}");
+                // Betting (added 22nd Jan)
+                Console.WriteLine(translations.Get("placeBet"), playerBalance);
                 int bet;
                 while (!int.TryParse(Console.ReadLine(), out bet) || bet <= 0 || bet > playerBalance)
                 {
-                    Console.WriteLine("Invalid bet. Please enter a positive number within your balance.");
+                    Console.WriteLine(translations.Get("invalidBet"));
                 }
 
                 // Initial deal
@@ -68,17 +96,17 @@ namespace Blackjack
                 player.ShowHand();
                 dealer.ShowInitialCard();
 
-                //First additional rule, Blackjack (two cards that sum 21)
+                // First additional rule, Blackjack (two cards that sum 21)
 
                 if (player.HasBlackjack)
                 {
                     if (dealer.HasBlackjack)
                     {
-                        Console.WriteLine("It's a tie! Both have Blackjack.");
+                        Console.WriteLine(translations.Get("tieBlackjack"));
                     }
                     else
                     {
-                        Console.WriteLine("Player wins with a Blackjack!");
+                        Console.WriteLine(translations.Get("playerBlackjack"));
                         wins++;
                         playerBalance += bet;
                     }
@@ -88,52 +116,51 @@ namespace Blackjack
                 // Player's turn (mainly ChatGPT)
                 // I have "twisted" the choices up a bit
 
-                //22nd January, I have added double down, but it can only be used on the first turn, therefore I implemented a first turn
+                // 22nd January, I have added double down, but it can only be used on the first turn, therefore I implemented a first turn
 
                 bool isFirstTurn = true;
                 while (!player.IsBust)
                 {
                     if (isFirstTurn)
                     {
-                        Console.WriteLine("Do you want to Stick, Twist, or Double Down? (s/t/d)");
+                        Console.WriteLine(translations.Get("playerChoiceFirst"));
                     }
                     else
                     {
-                        Console.WriteLine("Do you want to Stick or Twist? (s/t)");
+                        Console.WriteLine(translations.Get("playerChoice"));
                     }
 
-                        string choice = Console.ReadLine()?.ToLower();
+                    string choice = Console.ReadLine()?.ToLower();
 
                     if (choice == "d" && isFirstTurn) // Double Down
                     {
-                        //This if was done by Chat GPT
+                        // This if was done by Chat GPT
                         if (playerBalance < bet * 2)
                         {
-                            Console.WriteLine("You don't have enough balance to double down.");
+                            Console.WriteLine(translations.Get("noDoubleBalance"));
                             continue;
                         }
                         bet *= 2; // Double the bet
 
                         var newCard = deck.DealCard();
                         player.AddCard(newCard);
-                        Console.WriteLine($"You doubled down and were dealt: {newCard}");
-                        Console.WriteLine($"Your final score: {player.Score}");
 
+                        Console.WriteLine(translations.Get("doubleDown"), player.Score);
                         if (player.IsBust)
                         {
-                            Console.WriteLine("You're double bust!");
+                            Console.WriteLine(translations.Get("busted"));
                         }
                         break; // End turn after doubling down
                     }
                     else if (choice == "t")
                     {
                         // Deal one card to the player
-                        //Before it was showing the whole hand again, now it should only be card by card
+                        // Before it was showing the whole hand again, now it should only be card by card
                         var newCard = deck.DealCard();
                         player.AddCard(newCard);
 
                         Console.WriteLine($"You were dealt: {newCard}");
-                        Console.WriteLine($"Your current score: {player.Score}");
+                        Console.WriteLine(translations.Get("dealtCard"), newCard, player.Score);
                     }
                     else if (choice == "s")
                     {
@@ -141,37 +168,34 @@ namespace Blackjack
                     }
 
                     // Invalid input wasn't handled before, so I just added it
-
                     else
                     {
-                        Console.WriteLine("Oopsy doopsy! Invalid choice! Please enter 's' to Stick or 't' to Twist, or 'd' to Double Down (if you can)");
+                        Console.WriteLine(translations.Get("invalidChoice"));
                     }
                     isFirstTurn = false; // Disable double down after the first turn
                 }
 
                 if (player.IsBust)
                 {
-                    Console.WriteLine("Player busted! Dealer wins, muaaaaaaahahaaaaaaaa!!");
+                    Console.WriteLine(translations.Get("busted"));
                     losses++;
                     playerBalance -= bet;
-
-                    Console.WriteLine($"\nWins: {wins}, Losses: {losses}");
-                    Console.WriteLine($"Your balance: {playerBalance}");
+                    Console.WriteLine(translations.Get("gameStats"), wins, losses, playerBalance);
 
                     if (playerBalance <= 0)
                     {
-                        Console.WriteLine("You're out of money! Game over.");
+                        Console.WriteLine(translations.Get("outOfMoney"));
+                        keepPlaying = false;
                         break;
                     }
 
-                    Console.WriteLine("Do you want to play again? (y/n)");
-                    string response = Console.ReadLine()?.ToLower();
-                    keepPlaying = response == "y";
+                    Console.WriteLine(translations.Get("playAgain"));
+                    keepPlaying = Console.ReadLine()?.ToLower() == (language == "es" ? "s" : "y");
                     if (keepPlaying)
                     {
                         Console.Clear();
                     }
-                    continue;
+                    continue; // Skip the dealer's turn since the player lost
                 }
 
                 // Dealer's turn
@@ -179,49 +203,41 @@ namespace Blackjack
                 {
                     dealer.AddCard(deck.DealCard());
                 }
-                dealer.ShowFullHand();
-
+                dealer.ShowDealerHand();
 
                 // New way to determine the winner
                 // that also adds a counter to wins or losses.
                 // Inspired by one exercise where we used the ++ a lot
-                if (player.IsBust)
+
+                if (dealer.IsBust || player.Score > dealer.Score)
                 {
-                    Console.WriteLine("You lose!");
-                    losses++;
-                    playerBalance -= bet;
-                }
-                else if (dealer.IsBust || player.Score > dealer.Score)
-                {
-                    Console.WriteLine("You win!");
+                    Console.WriteLine(translations.Get("playerWin"));
                     wins++;
                     playerBalance += bet;
                 }
                 else if (player.Score < dealer.Score)
                 {
-                    Console.WriteLine("You lose!");
+                    Console.WriteLine(translations.Get("dealerWin"));
                     losses++;
                     playerBalance -= bet;
                 }
                 else
                 {
-                    Console.WriteLine("It's a tie!");
+                    Console.WriteLine(translations.Get("tie"));
                 }
 
-                Console.WriteLine($"\nWins: {wins}, Losses: {losses}");
-                Console.WriteLine($"Your balance: {playerBalance}");
+                Console.WriteLine(translations.Get("gameStats"), wins, losses, playerBalance);
 
                 // By Chat GPT:
-
                 if (playerBalance <= 0)
                 {
-                    Console.WriteLine("You're out of money! Game over.");
+                    Console.WriteLine(translations.Get("outOfMoney"));
                     break;
                 }
 
-                Console.WriteLine("Do you want to play again? (y/n)");
-                string playAgain = Console.ReadLine()?.ToLower();
-                keepPlaying = playAgain == "y";
+                Console.WriteLine(translations.Get("playAgain"));
+                keepPlaying = Console.ReadLine()?.ToLower() == (language == "es" ? "s" : "y");
+
                 if (keepPlaying)
                 {
                     Console.Clear();
@@ -230,9 +246,5 @@ namespace Blackjack
 
             Console.WriteLine("Thanks for playing!");
         }
-
     }
 }
-
-
-
