@@ -24,8 +24,9 @@ public class Card
     // Override ToString to display the card in a localized readable format
     public string ToString(Translations translations)
     {
-        return $"{GetLocalizedFace(translations)} of {GetLocalizedSuit(translations)}";
+        return $"{GetLocalizedFace(translations)} {GetLocalizedSuit(translations)}";
     }
+
 
     public int PointValue
     {

@@ -39,6 +39,20 @@ namespace Blackjack
                 Console.WriteLine("9. Si tu total supera 21, pierdes automáticamente.");
                 Console.WriteLine("10. Si tú y el crupier tenéis la misma puntuación, es un empate.\n");
             }
+            else if (language == "pt-PT")
+            {
+                Console.WriteLine("\nREGRAS DO BLACKJACK:");
+                Console.WriteLine("1. O objetivo é chegar o mais próximo possível de 21 sem ultrapassar.");
+                Console.WriteLine("2. As cartas numeradas valem o seu valor nominal.");
+                Console.WriteLine("3. As figuras (Rei, Rainha, Valete) valem 10 pontos.");
+                Console.WriteLine("4. Os Ases podem valer 1 ou 11 pontos, consoante for mais vantajoso.");
+                Console.WriteLine("5. Tanto o jogador como o dealer recebem inicialmente duas cartas.");
+                Console.WriteLine("6. O jogador pode 'pedir' para receber outra carta ou 'ficar' para parar.");
+                Console.WriteLine("7. O jogador pode 'duplicar' a aposta na primeira jogada, recebendo em seguida mais uma carta.");
+                Console.WriteLine("8. O dealer deve 'ficar' com 17 pontos ou mais e 'pedir' com 16 pontos ou menos.");
+                Console.WriteLine("9. Se o seu total exceder 21, 'estoura' e perde a rodada.");
+                Console.WriteLine("10. Se tanto o jogador como o dealer tiverem a mesma pontuação, é empate.\n");
+            }
         }
     }
 }

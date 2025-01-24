@@ -15,13 +15,21 @@ namespace Blackjack
             // Asking for language preference
 
 
+            Console.WriteLine("Bem-vindo ao Blackjack!");
             Console.WriteLine("Welcome to Blackjack!");
             Console.WriteLine("¡Bienvenidos a Blackjack!");
-            Console.WriteLine("Please select your language (press 1 or 2) / Selecciona el idioma (pulsa 1 o 2):");
-            Console.WriteLine("1. English");
-            Console.WriteLine("2. Español");
+            Console.WriteLine("Selecione o seu idioma (prima 1, 2 ou 3) / Select your language (press 1, 2 or 3) / Selecciona el idioma (pulsa 1 o 2):");
+            Console.WriteLine("1. Português");
+            Console.WriteLine("2. English");
+            Console.WriteLine("3. Español");
             string languageChoice = Console.ReadLine();
-            string language = languageChoice == "2" ? "es" : "en";
+            string language = languageChoice switch
+            {
+                "1" => "pt-PT",
+                "2" => "en",
+                "3" => "es",
+                _ => "en" // Default to English
+            };
 
             // Initialize translations
             Translations translations = new Translations(language);
@@ -31,32 +39,52 @@ namespace Blackjack
 
             Console.Clear();
 
-            if (language == "en")
+            //Asking to read the instructions
+
+            if (language == "pt-PT")
             {
-                Console.WriteLine("Would you like to read the rules before starting? (y/n)");
+                Console.WriteLine("Deseja ler as regras antes de começar? (s/n)");
             }
-            else
+            else if (language == "es")
             {
                 Console.WriteLine("¿Te gustaría leer las reglas antes de empezar? (s/n)");
             }
+            else if (language == "en")
+            {
+                Console.WriteLine("Would you like to read the rules before starting? (y/n)");
+            }
+
             string readRules = Console.ReadLine()?.ToLower();
 
-            if ((language == "en" && readRules == "y") || (language == "es" && readRules == "s"))
+            if ((language == "pt-PT" && readRules == "s") || (language == "es" && readRules == "s") || (language == "en" && readRules == "y"))
             {
                 Rules.Display(language);
-                Console.WriteLine(language == "en" ? "Press Enter to start the game..." : "Presiona Enter para comenzar el juego...");
+                if (language == "pt-PT")
+                {
+                    Console.WriteLine("Prima Enter para iniciar o jogo...");
+                }
+                else if (language == "es")
+                {
+                    Console.WriteLine("Presiona Enter para comenzar el juego...");
+                }
+                else
+                {
+                    Console.WriteLine("Press Enter to start the game...");
+                }
                 Console.ReadLine();
                 Console.Clear();
             }
 
-            Console.Clear();
-            Console.WriteLine(translations.Get("startingBalance"));
+            
 
             //22nd Jan, I'm introducing a loop in which the game keeps on until the player quits and then gives a final balance
 
             int wins = 0, losses = 0;
             int playerBalance = 100; // Starting balance
             bool keepPlaying = true; // I love bools
+
+            Console.Clear();
+            Console.WriteLine(translations.Get("startingBalance"), playerBalance);
 
             Deck deck = new Deck();
             deck.Shuffle();
@@ -236,7 +264,7 @@ namespace Blackjack
                 }
 
                 Console.WriteLine(translations.Get("playAgain"));
-                keepPlaying = Console.ReadLine()?.ToLower() == (language == "es" ? "s" : "y");
+                keepPlaying = Console.ReadLine()?.ToLower() == (language == "es" || language == "pt-PT" ? "s" : "y");
 
                 if (keepPlaying)
                 {
