@@ -18,7 +18,7 @@ namespace Blackjack
             Console.WriteLine("Bem-vindo ao Blackjack!");
             Console.WriteLine("Welcome to Blackjack!");
             Console.WriteLine("¡Bienvenidos a Blackjack!");
-            Console.WriteLine("Selecione o seu idioma (prima 1, 2 ou 3) / Select your language (press 1, 2 or 3) / Selecciona el idioma (pulsa 1 o 2):");
+            Console.WriteLine("\nSelecione o seu idioma (prima 1, 2 ou 3) / Select your language (press 1, 2 or 3) / Selecciona el idioma (pulsa 1 o 2):\n");
             Console.WriteLine("1. Português");
             Console.WriteLine("2. English");
             Console.WriteLine("3. Español");
@@ -75,7 +75,7 @@ namespace Blackjack
                 Console.Clear();
             }
 
-            
+
 
             //22nd Jan, I'm introducing a loop in which the game keeps on until the player quits and then gives a final balance
 
@@ -84,8 +84,6 @@ namespace Blackjack
             bool keepPlaying = true; // I love bools
 
             Console.Clear();
-            Console.WriteLine(translations.Get("startingBalance"), playerBalance);
-
             Deck deck = new Deck();
             deck.Shuffle();
 
@@ -138,7 +136,20 @@ namespace Blackjack
                         wins++;
                         playerBalance += bet;
                     }
-                    continue;
+                    Console.WriteLine(translations.Get("playAgain"));
+                    keepPlaying = Console.ReadLine()?.ToLower() == "s" || (language == "en" && Console.ReadLine()?.ToLower() == "y");
+
+                    if (keepPlaying)
+                    {
+                        Console.Clear();
+                    }
+                    else
+                    {
+                        break; // Exit the game loop if the player doesn't want to continue
+                    }
+
+                    continue; // Continue to the next game round if the player wants to play again
+
                 }
 
                 // Player's turn (mainly ChatGPT)
@@ -186,9 +197,7 @@ namespace Blackjack
                         // Before it was showing the whole hand again, now it should only be card by card
                         var newCard = deck.DealCard();
                         player.AddCard(newCard);
-
-                        Console.WriteLine($"You were dealt: {newCard}");
-                        Console.WriteLine(translations.Get("dealtCard"), newCard, player.Score);
+                        Console.WriteLine(translations.Get("dealtCard"), newCard.ToString(translations), player.Score);
                     }
                     else if (choice == "s")
                     {
@@ -264,15 +273,15 @@ namespace Blackjack
                 }
 
                 Console.WriteLine(translations.Get("playAgain"));
-                keepPlaying = Console.ReadLine()?.ToLower() == (language == "es" || language == "pt-PT" ? "s" : "y");
+                keepPlaying = Console.ReadLine()?.ToLower() == "s" || (language == "en" && Console.ReadLine()?.ToLower() == "y");
 
                 if (keepPlaying)
                 {
                     Console.Clear();
                 }
-            }
 
-            Console.WriteLine("Thanks for playing!");
+                Console.WriteLine("Thanks for playing!");
+            }
         }
     }
 }
