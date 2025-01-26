@@ -30,6 +30,7 @@ namespace Blackjack
                 _translations.Add("doubleDown", "You chose to double down. Your new total is: {0}");
                 _translations.Add("dealtCard", "You were dealt a {0}. Your new total is: {1}");
                 _translations.Add("busted", "You busted!");
+                _translations.Add("dealerBusted", "The dealer busted!");
                 _translations.Add("tieBlackjack", "It's a tie! Both you and the dealer have Blackjack.");
                 _translations.Add("playerBlackjack", "You got a Blackjack!");
                 _translations.Add("gameStats", "Wins: {0}, Losses: {1}, Balance: {2}");
@@ -84,6 +85,7 @@ namespace Blackjack
                 _translations.Add("gameStats", "Victorias: {0}, Derrotas: {1}, Saldo: {2}");
                 _translations.Add("outOfMoney", "Te quedaste sin dinero. Fin del juego, colegui.");
                 _translations.Add("playAgain", "¿Quieres jugar de nuevo? (s/n)");
+                _translations.Add("dealerBusted", "El crupier se ha pasado.");
                 _translations.Add("dealerWin", "¡El crupier gana!");
                 _translations.Add("playerWin", "¡Ganaste!");
                 _translations.Add("tie", "¡Es un empate!");
@@ -133,6 +135,7 @@ namespace Blackjack
                 _translations.Add("gameStats", "Vitórias: {0}, Derrotas: {1}, Saldo: {2}");
                 _translations.Add("outOfMoney", "Ficou sem dinheiro. Fim de jogo.");
                 _translations.Add("playAgain", "Deseja jogar novamente? (s/n)");
+                _translations.Add("dealerBusted", "O croupier foi longe demais");
                 _translations.Add("dealerWin", "O dealer venceu!");
                 _translations.Add("playerWin", "Ganhou!");
                 _translations.Add("tie", "Empate!");

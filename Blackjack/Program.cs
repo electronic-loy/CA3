@@ -280,7 +280,7 @@ namespace Blackjack
                     Console.Clear();
                 }
 
-                Console.WriteLine("Thanks for playing!");
+                
             }
         }
     }

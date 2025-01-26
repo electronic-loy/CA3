@@ -9,6 +9,7 @@ namespace Blackjack
         private const int NUMBER_OF_CARDS = 52;
         private Random ranNum;
 
+        //First reference: https://www.youtube.com/watch?v=KreWvnOgNa8&ab_channel=Fritz%27sTechTipsandChatter
         public Deck()
         {
             string[] suits = { "Hearts", "Diamonds", "Clubs", "Spades" };
